@@ -24,10 +24,13 @@ Rodzaj osoby jedzącej kolację: Mati, dorosły mężczyzna, kobieta, dziecko 2�
 Wybrany przycisk określający, pod co liczy się ocena (np. odciążenie wątroby). Każdy cel ma swoje warunki i wagi, oparte na badaniach.
 
 **Ocena**:
-Liczba 1–10 dla przepisu i tygodnia, liczona jawnie ze składowych według aktywnych celów optymalizacji.
+Liczba 1–10 dla przepisu, liczona jawnie ze składowych. Każdy aktywny cel optymalizacji ma swoją ocenę; ocena przepisu to ich średnia.
+
+**Ocena tygodnia**:
+Średnia ocen kolacji plus osobne **normy tygodniowe** (np. ryba, strączki, orzechy ile razy w tygodniu). Niespełniona norma daje flagę tygodnia.
 
 **Flaga**:
-Ostrzeżenie przy przepisie lub tygodniu, niezależne od oceny. **Żółta**: uważaj, przekroczony próg (np. dużo soli). **Czerwona**: produkt lub ilość sprzeczna z dietą (np. alkohol, dużo cukru dodanego).
+Ostrzeżenie przy przepisie lub tygodniu. Tylko informuje, nie zmienia oceny. **Żółta**: uważaj, przekroczony próg (np. dużo soli). **Czerwona**: produkt lub ilość wyraźnie sprzeczna z celem (np. alkohol, dużo cukru dodanego). Flaga mówi wprost, co ją powoduje i co zrobić, w kolejności od tego, co ma największy wpływ (Pareto).
 
 **Batch**:
 Baza przygotowywana raz (np. kurczak z warzywami w jednym naczyniu) na kilka kolacji.
@@ -36,5 +39,5 @@ Baza przygotowywana raz (np. kurczak z warzywami w jednym naczyniu) na kilka kol
 
 - **Przepis** składa się z **produktów** w **jednostkach sklepowych**
 - **Kolacja** w planie = **przepis** + liczba porcji per **profil porcji**
-- **Ocena** i **flagi** zależą od aktywnych **celów optymalizacji**
+- **Ocena** i **flagi** zależą od aktywnych **celów optymalizacji**, wybieranych raz dla całego planu
 - Wartości odżywcze: domyślnie krótka lista (zależna od celu), pełna lista wszystkiego z etykiety po rozwinięciu
