@@ -1,0 +1,169 @@
+<title>Tydzień dla wątroby</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Source+Sans+3:wght@400;600&display=swap">
+<style>
+/* Layout: sticky ocena tygodnia → batch → 7 dni → lista zakupów z checkboxami */
+:root{
+  --bg:#f5f7f2;--card:#fff;--fg:#1f2a22;--muted:#5d6b61;--line:#dbe3d8;
+  --accent:#3f7d4e;--good:#3f7d4e;--mid:#c58a1c;--bad:#b4473a;--empty:#e7ece4;
+  --display:"Fraunces",Georgia,serif;--body:"Source Sans 3",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141a16;--card:#1c241e;--fg:#e4ebe3;--muted:#9aa89d;--line:#2d3830;--accent:#7cc08e;--good:#7cc08e;--mid:#e0ac4a;--bad:#e07c6e;--empty:#26302a;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#141a16;--card:#1c241e;--fg:#e4ebe3;--muted:#9aa89d;--line:#2d3830;--accent:#7cc08e;--good:#7cc08e;--mid:#e0ac4a;--bad:#e07c6e;--empty:#26302a;color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font:16px/1.5 var(--body);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 48px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.wrap{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:28px}
+h1,h2{font-family:var(--display);font-weight:600;text-wrap:balance;margin:0}
+h1{font-size:1.9rem}h2{font-size:1.3rem}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:14px;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:8px}
+.bar .row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+.score{font:600 1.6rem var(--display);font-variant-numeric:tabular-nums}
+.days{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.days span{height:8px;border-radius:2px;background:var(--empty)}
+.meta{color:var(--muted);font-size:.9rem;font-variant-numeric:tabular-nums}
+.recipe{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:12px}
+.recipe.empty{background:transparent;border-style:dashed;color:var(--muted);padding-block:14px}
+.head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.tag{font-size:.75rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.pill{font:600 1rem var(--body);font-variant-numeric:tabular-nums;padding:4px 10px;border-radius:99px;color:#fff;white-space:nowrap}
+.macros{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;text-align:center}
+.macros div{border-top:2px solid var(--line);padding-top:6px}
+.macros b{display:block;font-size:1.1rem;font-variant-numeric:tabular-nums}
+.macros small{color:var(--muted)}
+ul,ol{margin:0;padding-left:20px}
+.ppl{display:flex;align-items:center;gap:8px}.ppl button{padding:2px 10px;align-self:auto}.ppl b{min-width:1.5em;text-align:center;font-variant-numeric:tabular-nums}
+.ing{display:grid;grid-template-columns:1fr auto;gap:2px 16px;margin:0;font-size:.95rem}.ing dd{margin:0;color:var(--muted);font-variant-numeric:tabular-nums;text-align:right}
+.eat{display:flex;gap:6px;align-items:center;font-size:.85rem;color:var(--muted);cursor:pointer;white-space:nowrap}.eat input{width:18px;height:18px;accent-color:var(--accent)}
+.recipe.eaten{opacity:.55}.recipe.eaten h2{text-decoration:line-through}
+.why{font-size:.92rem;color:var(--muted)}
+.shop{display:flex;flex-direction:column;gap:2px}
+.shop label{display:flex;gap:10px;align-items:center;padding:8px 4px;border-bottom:1px solid var(--line);cursor:pointer}
+.shop input{width:20px;height:20px;accent-color:var(--accent)}
+.shop .q{margin-left:auto;color:var(--muted);font-variant-numeric:tabular-nums}
+.shop label.done span{text-decoration:line-through;color:var(--muted)}
+button{font:inherit;background:none;border:1px solid var(--line);color:var(--fg);border-radius:6px;padding:6px 12px;cursor:pointer;align-self:flex-start}
+button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+@media (max-width:480px){.macros{grid-template-columns:repeat(3,1fr)}}
+</style>
+
+<div class="wrap">
+  <header class="bar" id="bar"></header>
+  <h1>Kolacje: dieta odciążająca wątrobę</h1>
+  <section id="batches"></section>
+  <section id="days" style="display:flex;flex-direction:column;gap:14px"></section>
+  <section style="display:flex;flex-direction:column;gap:10px">
+    <h2>Lista zakupów</h2>
+    <p class="meta" style="margin:0">Tworzy się z przepisów. Bez jajek i pieczywa. Przyprawy, oliwa i pestki są w domu.</p>
+    <div class="shop" id="shop"></div>
+    <button id="reset">Odznacz wszystko</button>
+  </section>
+</div>
+
+<script>
+// ===== DANE: dopisujemy kolejne przepisy tutaj. Ilości składników = na 1 osobę. =====
+const BATCHES=[
+  {id:"kurczak",name:"Pieczona pierś z kurczaka",source:"Pierś z kurczaka (lada)",
+   steps:["Nagrzej piekarnik do 200°C.","Warzywa pokrój (marchew w cienkie plastry, brokuł na różyczki, paprykę w paski), wymieszaj z łyżką oliwy i solą i wyłóż na dno naczynia żaroodpornego.","Kurczaka natrzyj oliwą, czosnkiem, papryką słodką i oregano, połóż na warzywach.","Piecz bez przykrycia 30 min. Kurczak jest gotowy, gdy sok z nakłucia jest przezroczysty, a w środku nie jest różowy.","Kurczaka odstaw na 10 min i pokrój. Wszystko ostudź i schowaj do pojemników w lodówce: wytrzyma 3–4 dni."]}
+];
+const DAYS=[
+  {day:"1",name:"Sałatka z kurczakiem i pieczonymi warzywami",score:9,
+   kcal:640,p:72,f:24,c:28,fib:10,
+   micro:"Witamina C i K (brokuł), beta-karoten (marchew), magnez i cynk (pestki dyni), B3 i B6 (kurczak).",
+   why:"Chude białko, dużo warzyw, zdrowy tłuszcz z oliwy i pestek, zero cukru. Minus jedno oczko za mało pełnego ziarna.",
+   ing:[["Pierś z kurczaka (lada)",300,"g"],["Brokuł",0.5,"szt.","","piecz"],["Marchew",1,"szt.","","piecz"],["Papryka czerwona",0.5,"szt.","","piecz"],["Roszponka",50,"g"],["Skyr naturalny",60,"g"],["Cytryna",0.5,"szt."],["Czosnek",1,"ząbek"]],
+   steps:["Dressing: skyr, czosnek, sok z cytryny, sól, pieprz.","Na roszponkę połóż pokrojonego kurczaka i warzywa, posyp łyżką pestek dyni, polej dressingiem."]},
+  {day:"2",name:"Wrap z kurczakiem i awokado",score:8,
+   kcal:700,p:72,f:24,c:48,fib:11,
+   micro:"Potas i folian (awokado), witamina C (pomidor), B3 i B6 (kurczak), błonnik z pełnego ziarna.",
+   why:"Białko i zdrowe tłuszcze w dobrej proporcji, pełne ziarno. Tortilla sklepowa ma zwykle trochę soli i dodatków, stąd 8.",
+   ing:[["Pierś z kurczaka (lada)",300,"g"],["Tortilla pełnoziarnista",1,"szt."],["Awokado",0.5,"szt."],["Pomidor",1,"szt."],["Ogórek",0.5,"szt."],["Skyr naturalny",30,"g"]],
+   steps:["Tortillę podgrzej chwilę na suchej patelni.","Rozsmaruj awokado rozgniecione z sokiem z cytryny.","Dodaj kurczaka, pomidor, ogórek i skyr z czosnkiem.","Zwiń i przekrój na pół."]},
+  {day:"3",name:"Pasta twarogowo-jajeczna na bułce razowej z warzywami",score:9,
+   kcal:485,p:45,f:12,c:44,fib:9,
+   micro:"Wapń (twaróg), cholina i B12 (jajka), witamina C (rzodkiewka, pomidor), błonnik i magnez (bułka razowa).",
+   why:"Chudy nabiał i jajka dają dużo białka przy małej ilości tłuszczu nasyconego, bułka razowa to pełne ziarno, warzywa na surowo. Najlżejsza z dotychczasowych kolacji.",
+   ing:[["Twaróg chudy",125,"g"],["Jajka",2,"szt.","poza"],["Skyr naturalny",30,"g"],["Bułka razowa / grahamka",1,"szt.","poza"],["Rzodkiewka",4,"szt."],["Szczypiorek",0.25,"pęczek"],["Ogórek",0.5,"szt."],["Pomidor",1,"szt."]],
+   steps:["Jajka ugotuj na twardo (10 min), ostudź w zimnej wodzie i obierz.","Twaróg rozgnieć widelcem ze skyrem, dodaj posiekane jajka, szczypiorek, sól, pieprz i łyżeczkę musztardy.","Rzodkiewkę pokrój w plasterki: część wmieszaj w pastę, resztę połóż na kanapki.","Podawaj na przekrojonej bułce razowej lub grahamce, z ogórkiem i pomidorem obok."]},
+  {day:"4",name:"Kanapki z kurczakiem i hummusem, pieczone warzywa",score:8,
+   kcal:625,p:58,f:20,c:47,fib:11,
+   micro:"Witamina C i K (brokuł), beta-karoten (marchew), żelazo i foliany (ciecierzyca w hummusie), B3 i B6 (kurczak).",
+   why:"Chude białko, pełne ziarno i sporo warzyw. Hummus ze sklepu ma zwykle sporo soli, stad 8.",
+   ing:[["Pierś z kurczaka (lada)",200,"g"],["Hummus",50,"g"],["Bułka razowa / grahamka",1,"szt.","poza"],["Brokuł",0.5,"szt.","","piecz"],["Marchew",1,"szt.","","piecz"],["Papryka czerwona",0.5,"szt.","","piecz"],["Roszponka",30,"g"]],
+   steps:["Bułkę przekrój, posmaruj hummusem.","Nałóż roszponkę i plastry kurczaka.","Warzywa podgrzej 2–3 min na patelni lub zjedz na zimno obok kanapek."]},
+  {day:"5",name:"Tofu z pieczarkami i sałatką z roszponki",score:8,
+   kcal:575,p:36,f:28,c:42,fib:10,
+   micro:"Wapń i żelazo (tofu), wit. B2 i selen (pieczarki), witamina C i K (roszponka, pomidorki), magnez (bułka razowa).",
+   why:"Roślinne białko bez tłuszczu nasyconego, dużo warzyw, smazące tylko na łyżce oliwy. Więcej tłuszczu niż reszta tygodnia, stąd 8.",
+   ing:[["Tofu naturalne",180,"g"],["Pieczarki",150,"g"],["Czosnek",1,"ząbek"],["Roszponka",50,"g"],["Pomidorki koktajlowe",100,"g"],["Ogórek",0.5,"szt."],["Skyr naturalny",40,"g"],["Bułka razowa / grahamka",1,"szt.","poza"]],
+   steps:["Tofu odsącz, osusz papierowym ręcznikiem i pokrój w kostkę. Pieczarki pokrój w plastry.","Na łyżce oliwy podsmaż tofu 5–6 min, aż się zarumieni. Dodaj pieczarki i przeciśnięty czosnek, smaż jeszcze 5 min. Dopraw solą i pieprzem.","Sałatka: roszponka, przekrojone pomidorki, ogórek.","Dressing: skyr z czosnkiem, sokiem z cytryny i suszonymi ziołami. Bułka obok."]},
+  {day:"6",name:"Sałatka z łososiem w pomidorach",score:8,
+   kcal:540,p:32,f:25,c:40,fib:9,
+   micro:"Omega-3 ok. 2 g (łosoś), potas i foliany (awokado, roszponka), magnez i cynk (pestki dyni).",
+   why:"Tłusta ryba, dużo zieleniny i zdrowe tłuszcze. Sos z puszki jest lekko dosładzany, stąd 8.",
+   ing:[["Łosoś w pomidorach (puszka)",1,"szt.","dom"],["Roszponka",50,"g"],["Ogórek",0.5,"szt."],["Pomidorki koktajlowe",100,"g"],["Awokado",0.25,"szt."],["Bułka razowa / grahamka",1,"szt.","poza"]],
+   steps:["Roszponkę wyłóż na talerz, dodaj ogórek, przekrojone pomidorki i awokado w kostce.","Na wierzch łosoś w kawałkach razem z sosem, który robi za dressing.","Posyp łyżką pestek dyni, skrop cytryną. Bułka obok."]},
+  {day:"7",name:"Kanapki z pastą z białej fasoli i suszonych pomidorów",score:9,
+   kcal:490,p:34,f:9,c:60,fib:15,
+   micro:"Foliany, żelazo i magnez (fasola), wapń (twaróg), likopen (suszone pomidory), witamina C (papryka, rzodkiewka).",
+   why:"Strączki i chudy twaróg dają białko przy bardzo małej ilości tłuszczu, do tego najwięcej błonnika w tygodniu. Twaróg w paście podbija białko z ok. 15 g do 34 g.",
+   ing:[["Fasola biała (puszka)",0.5,"szt."],["Twaróg chudy",100,"g"],["Suszone pomidory (słoik)",20,"g"],["Czosnek",1,"ząbek"],["Cytryna",0.25,"szt."],["Bułka razowa / grahamka",1,"szt.","poza"],["Papryka czerwona",0.5,"szt."],["Rzodkiewka",4,"szt."],["Ogórek",0.5,"szt."]],
+   steps:["Fasolę odsącz i przepłucz. Suszone pomidory odsącz z oleju na sitku.","Zblenduj albo rozgnieć widelcem fasolę z twarogiem, pomidorami, czosnkiem, sokiem z cytryny i łyżeczką oliwy. Dopraw pieprzem i suszoną bazylią lub oregano.","Posmaruj przekrojoną bułkę, na wierzch plasterki rzodkiewki.","Paprykę i ogórek pokrój w słupki i jedz obok. Reszta pasty wytrzyma 2–3 dni w lodówce."]}
+];
+// ===== KONIEC DANYCH =====
+
+const dayNames=["1","2","3","4","5","6","7"];
+const col=s=>s>=8?"var(--good)":s>=6?"var(--mid)":"var(--bad)";
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fmt=q=>{const r=Math.round(q*100)/100;return String(r).replace(".",",")};
+const load=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}};
+const store=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+let ppl=load("ppl-v1",{});let eaten=load("eaten-v1",{});let checked=load("shop-v1",{});
+const P=i=>ppl[i]||1;
+const filled=DAYS.map((d,i)=>d&&{...d,i}).filter(Boolean);
+
+function roast(){const m=new Map();filled.forEach(d=>d.ing.forEach(([n,q,u,x,r])=>{if(r!=="piecz")return;m.set(n+"|"+u,(m.get(n+"|"+u)||0)+q*P(d.i))}));
+  if(!m.size)return"";const ds=filled.filter(d=>d.ing.some(x=>x[4]==="piecz")).map(d=>d.day).join(", ");
+  return `<p style="margin:0"><b>Warzywa do naczynia (na kolacje ${ds}):</b> ${[...m].map(([k,q])=>{const[n,u]=k.split("|");return esc(n)+" "+fmt(Math.ceil(q))+" "+esc(u)}).join(" · ")}</p>`}
+function render(){
+  const n=filled.length||1,avg=filled.reduce((a,d)=>a+d.score,0)/n,sum=k=>filled.reduce((a,d)=>a+d[k],0);
+  document.getElementById("bar").innerHTML=`
+    <div class="row"><span class="tag">Ocena tygodnia</span>
+    <span class="score" style="color:${col(avg)}">${filled.length?avg.toFixed(1):"–"}<small class="meta"> / 10</small></span></div>
+    <div class="days">${DAYS.map(d=>`<span style="background:${d?col(d.score):"var(--empty)"}"></span>`).join("")}</div>
+    <div class="meta">Zaplanowane ${filled.length}/7 · zjedzone ${filled.filter(d=>eaten[d.i]).length}/${filled.length} · na porcję średnio: ${Math.round(sum("kcal")/n)} kcal · B ${Math.round(sum("p")/n)} g · T ${Math.round(sum("f")/n)} g · W ${Math.round(sum("c")/n)} g · bł. ${Math.round(sum("fib")/n)} g</div>`;
+
+  document.getElementById("batches").innerHTML=`<h2 style="margin-bottom:10px">Batche</h2>`+BATCHES.map(b=>{
+    const uses=filled.filter(d=>d.ing.some(x=>x[0]===b.source));
+    const tot=uses.reduce((a,d)=>a+d.ing.find(x=>x[0]===b.source)[1]*P(d.i),0);
+    return `<article class="recipe"><div><span class="tag">Batch · na kolacje ${uses.map(d=>d.day).join(", ")}</span><h2>${esc(b.name)}</h2></div>
+    <p style="margin:0"><b>Upiecz razem: ${fmt(tot)} g surowej piersi</b> <span class="meta">(liczone z osób przy każdej kolacji)</span></p>${roast()}
+    <ol>${b.steps.map(s=>`<li>${esc(s)}</li>`).join("")}</ol></article>`}).join("");
+
+  document.getElementById("days").innerHTML=`<h2>Kolacje</h2>`+DAYS.map((d,i)=>d?`
+    <article class="recipe${eaten[i]?" eaten":""}">
+      <div class="head"><div><span class="tag">Kolacja ${esc(d.day)}</span><h2>${esc(d.name)}</h2></div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px"><span class="pill" style="background:${col(d.score)}">${d.score}/10</span><label class="eat"><input type="checkbox" id="e${i}" data-e="${i}" ${eaten[i]?"checked":""}> zjedzone</label></div></div>
+      <div class="ppl"><span class="meta">Osoby:</span><button data-i="${i}" data-d="-1" aria-label="Mniej osób">−</button><b>${P(i)}</b><button data-i="${i}" data-d="1" aria-label="Więcej osób">+</button></div>
+      <div class="macros">
+        <div><b>${d.kcal}</b><small>kcal</small></div><div><b>${d.p} g</b><small>białko</small></div>
+        <div><b>${d.f} g</b><small>tłuszcz</small></div><div><b>${d.c} g</b><small>węgle</small></div>
+        <div><b>${d.fib} g</b><small>błonnik</small></div></div>
+      <p class="meta" style="margin:-6px 0 0">Wartości na 1 porcję.</p>
+      <dl class="ing">${d.ing.map(([n,q,u])=>`<dt>${esc(n)}</dt><dd>${fmt(q*P(i))} ${esc(u)}</dd>`).join("")}</dl>
+      <p class="why" style="margin:0"><b>Mikro:</b> ${esc(d.micro)}</p>
+      <ol>${d.steps.map(s=>`<li>${esc(s)}</li>`).join("")}</ol>
+      <p class="why" style="margin:0"><b>Ocena:</b> ${esc(d.why)}</p>
+    </article>`:`<div class="recipe empty"><span class="tag">Kolacja ${dayNames[i]}</span> do ustalenia</div>`).join("");
+
+  const map=new Map();
+  filled.forEach(d=>d.ing.forEach(([n,q,u,x])=>{if(x==="poza"||x==="dom")return;const k=n+"|"+u;map.set(k,(map.get(k)||0)+q*P(d.i))}));
+  document.getElementById("shop").innerHTML=[...map].map(([k,q],j)=>{const[n,u]=k.split("|");const up=["szt.","ząbek","pęczek"].includes(u)?Math.ceil(q):q;return `
+    <label class="${checked[k]?"done":""}"><input type="checkbox" id="s${j}" data-k="${esc(k)}" ${checked[k]?"checked":""}>
+    <span>${esc(n)}</span><span class="q">${fmt(up)} ${esc(u)}</span></label>`}).join("");
+}
+document.addEventListener("click",e=>{const b=e.target.closest(".ppl button");if(!b)return;const i=+b.dataset.i;ppl[i]=Math.min(8,Math.max(1,P(i)+ +b.dataset.d));store("ppl-v1",ppl);render()});
+document.getElementById("days").addEventListener("change",e=>{const i=e.target.dataset.e;if(i===undefined)return;eaten[i]=e.target.checked;store("eaten-v1",eaten);render()});
+document.getElementById("shop").addEventListener("change",e=>{const k=e.target.dataset.k;checked[k]=e.target.checked;e.target.parentElement.classList.toggle("done",e.target.checked);store("shop-v1",checked)});
+document.getElementById("reset").onclick=()=>{checked={};store("shop-v1",checked);render()};
+render();
+</script>
