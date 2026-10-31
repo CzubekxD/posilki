@@ -1,0 +1,40 @@
+# Posiłki
+
+Planowanie posiłków pod dietę odciążającą wątrobę. Na razie tylko kolacje.
+
+## Language
+
+**Produkt**:
+Pozycja w bazie z wartościami odżywczymi na 100 g. Albo ogólny (np. „brokuł”), albo konkretny ze sklepu (marka i gramatura z etykiety). Dane mają wskazywać kierunek, nie aptekarską dokładność.
+_Avoid_: składnik (to użycie produktu w przepisie)
+
+**Jednostka sklepowa**:
+Forma, w jakiej produkt kupuje się w sklepie: sztuka, opakowanie (np. kubek skyru, puszka) albo gramy dla produktów sypkich i ważonych. W niej podaje się ilości w przepisie i na liście zakupów.
+
+**Przepis**:
+Lista składników (produkt + ilość w jednostce sklepowej) na jedną porcję bazową oraz kroki przygotowania.
+
+**Porcja bazowa**:
+Porcja dla Matiego. Punkt odniesienia dla ilości w przepisie.
+
+**Profil porcji**:
+Rodzaj osoby jedzącej kolację: Mati, dorosły mężczyzna, kobieta, dziecko 2–4 lata. Przy każdej kolacji zaznacza się, ile porcji każdego profilu. Na start profile mogą mieć ten sam rozmiar; różnice dojdą, gdy się okaże, że są potrzebne.
+
+**Cel optymalizacji**:
+Wybrany przycisk określający, pod co liczy się ocena (np. odciążenie wątroby). Każdy cel ma swoje warunki i wagi, oparte na badaniach.
+
+**Ocena**:
+Liczba 1–10 dla przepisu i tygodnia, liczona jawnie ze składowych według aktywnych celów optymalizacji.
+
+**Flaga**:
+Ostrzeżenie przy przepisie lub tygodniu, niezależne od oceny. **Żółta**: uważaj, przekroczony próg (np. dużo soli). **Czerwona**: produkt lub ilość sprzeczna z dietą (np. alkohol, dużo cukru dodanego).
+
+**Batch**:
+Baza przygotowywana raz (np. kurczak z warzywami w jednym naczyniu) na kilka kolacji.
+
+## Relationships
+
+- **Przepis** składa się z **produktów** w **jednostkach sklepowych**
+- **Kolacja** w planie = **przepis** + liczba porcji per **profil porcji**
+- **Ocena** i **flagi** zależą od aktywnych **celów optymalizacji**
+- Wartości odżywcze: domyślnie krótka lista (zależna od celu), pełna lista wszystkiego z etykiety po rozwinięciu
