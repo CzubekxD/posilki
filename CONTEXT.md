@@ -38,6 +38,15 @@ Konkretna informacja, czego unikać poza planem w danym tygodniu, wynikająca z 
 **Szacunek**:
 Wartości produktu wpisane przez Claude z pierwszego wyszukiwania w internecie, gdy nie ma jeszcze etykiety. Zawsze widocznie oznaczone, do podmiany na dane z etykiety.
 
+**Opinia**:
+Ocena dania przez Matiego po zjedzeniu: podeszło albo nie. Osobna od **oceny** dietetycznej.
+
+**Archiwum**:
+Plany z 4 ostatnich tygodni, z oceną i opinią każdego dania. Starsze wypadają.
+
+**Dania OK** / **Dania nie OK**:
+Biblioteka przepisów w repo, podzielona według opinii. Dania OK to instrukcje, z których układa się kolejne tygodnie. Dania nie OK zostają zapisane, żeby można je było przywołać albo świadomie pominąć.
+
 **Batch**:
 Baza przygotowywana raz (np. kurczak z warzywami w jednym naczyniu) na kilka kolacji.
 
