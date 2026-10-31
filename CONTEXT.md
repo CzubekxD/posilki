@@ -32,6 +32,12 @@ Liczba 1–10 dla przepisu, liczona jawnie ze składowych. Każdy aktywny cel op
 **Flaga**:
 Ostrzeżenie przy przepisie lub tygodniu. Tylko informuje, nie zmienia oceny. **Żółta**: uważaj, przekroczony próg (np. dużo soli). **Czerwona**: produkt lub ilość wyraźnie sprzeczna z celem (np. alkohol, dużo cukru dodanego). Flaga mówi wprost, co ją powoduje i co zrobić, w kolejności od tego, co ma największy wpływ (Pareto).
 
+**Wskazówka tygodnia**:
+Konkretna informacja, czego unikać poza planem w danym tygodniu, wynikająca z tego, co już jest w kolacjach (np. „kolacje mają w tym tygodniu dużo soli z konserw: odpuść wędliny i słone przekąski”). Liczona tylko z planu; to obraz testowy, nie ocena całej diety.
+
+**Szacunek**:
+Wartości produktu wpisane przez Claude z pierwszego wyszukiwania w internecie, gdy nie ma jeszcze etykiety. Zawsze widocznie oznaczone, do podmiany na dane z etykiety.
+
 **Batch**:
 Baza przygotowywana raz (np. kurczak z warzywami w jednym naczyniu) na kilka kolacji.
 
