@@ -12,7 +12,8 @@ Planowanie posiłków pod dietę odciążającą wątrobę (śródziemnomorska: 
 - Zakupy w Biedronce (Rudzica, lada tradycyjna). Jajka i pieczywo kupowane gdzie indziej — nie trafiają na listę.
 
 ## Zasady planu
-- Gotowanie w batchach: jedna baza (np. kurczak + warzywa w jednym naczyniu żaroodpornym) na kilka kolacji.
+- Gotowanie w batchach: jedna baza (np. pieczony kurczak, pasztet) na kilka kolacji.
+- Kolacje z jednego batcha idą w kolejne dni pod rząd, żeby nic nie leżało długo w lodówce.
 - Pieczywo: bułki razowe/grahamki zamiast bochenka (nie wysychają).
 - Ilości w przepisach na 1 osobę, skalowane liczbą osób przy każdej kolacji.
 - Produkty z domu (konserwy, cebula) oznaczone i pomijane na liście zakupów.
