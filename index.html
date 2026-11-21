@@ -63,8 +63,16 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline
 <script>
 // ===== DANE: dopisujemy kolejne przepisy tutaj. Ilości składników = na 1 osobę. =====
 const BATCHES=[
-  {name:"Pasztet z soczewicy i pieczarek",source:"Soczewica czerwona",say:"g suchej soczewicy",
-   steps:["Soczewicę opłucz i gotuj 12–15 min w podwójnej ilości wody, odcedź.","Cebulę, pieczarki i czosnek podsmaż na łyżce oliwy 8–10 min, aż odparuje woda.","Zblenduj wszystko z jajkiem, płatkami owsianymi, majerankiem, solą i pieprzem.","Przełóż do keksówki z papierem, piecz 45 min w 180°C. Po upieczeniu odstaw na godzinę do wystygnięcia, wtedy łatwiej się kroi. Gotowy pasztet trzymaj w lodówce do 5 dni.","Na pełną keksówkę (ok. 25 cm): 200 g suchej soczewicy, 500 g pieczarek, 2 cebule, 2 jajka, 40 g płatków owsianych, 2 ząbki czosnku. Wychodzi ok. 4 porcji po 150 g."]},
+  {name:"Pasztet z soczewicy i pieczarek",source:"Soczewica czerwona",say:"g suchej soczewicy (pełna keksówka, ok. 4 porcje po 150 g; nadmiar rozdaj)",
+   steps:[
+    "Przygotuj: keksówkę ok. 25 cm wyłóż papierem do pieczenia. Piekarnik nagrzej do 180°C (góra-dół).",
+    "Soczewica: 200 g suchej czerwonej soczewicy opłucz na sitku pod zimną wodą. Wsyp do garnka, zalej 500 ml wody, zagotuj i gotuj na małym ogniu 12–15 min bez przykrycia, aż będzie miękka i rozpadająca się. Odcedź na sitku i zostaw, żeby odparowała.",
+    "Warzywa: 2 cebule pokrój w kostkę, 500 g pieczarek w plastry, 2 ząbki czosnku posiekaj.",
+    "Na dużej patelni rozgrzej łyżkę oliwy. Cebulę smaż 4–5 min, aż się zeszkli. Dodaj pieczarki i smaż 8–10 min na średnim ogniu, mieszając, aż puszczą wodę i ta całkiem odparuje (na dnie patelni ma być sucho). Na koniec dodaj czosnek na 1 min.",
+    "Przełóż soczewicę i warzywa do miski, odstaw na 10 min, żeby przestygły (inaczej jajka się zetną).",
+    "Dodaj 2 surowe jajka, 40 g płatków owsianych, 1 łyżeczkę majeranku, ½ łyżeczki papryki wędzonej, 1 łyżeczkę soli i pieprz. Zblenduj blenderem ręcznym na gładką masę. Spróbuj i dopraw.",
+    "Przełóż masę do keksówki, wyrównaj łyżką. Piecz 45–50 min. Gotowy, gdy wierzch jest zrumieniony, a wbity w środek patyczek wychodzi suchy.",
+    "Wyjmij i zostaw w formie na ok. godzinę do wystygnięcia, wtedy nie rozpada się przy krojeniu. Gotowy pasztet trzymaj w lodówce do 5 dni."]},
   {name:"Pieczona pierś z kurczaka (bez warzyw)",source:"Pierś z kurczaka (lada)",say:"g surowej piersi",
    steps:["Natrzyj oliwą, czosnkiem, papryką słodką i oregano.","Piecz sam w naczyniu 22–25 min w 200°C, odstaw na 10 min, pokrój.","W lodówce 3–4 dni. Warzywa do kurczaka zawsze na surowo."]}
 ];
@@ -75,13 +83,13 @@ const DAYS=[
    micro:"Foliany, żelazo i magnez (soczewica), selen i B2 (pieczarki), wapń (skyr), witamina C (papryka, rzodkiewka).",
    why:"Strączki i dużo błonnika, prawie zero tłuszczów nasyconych, bez cukru. Sporo węglowodanów, ale pełnych.",
    ing:[...PASZTET,["Skyr pitny naturalny",1,"szt.","dom"],["Bułka razowa / grahamka",1,"szt.","poza"],["Rzodkiewka",4,"szt."],["Ogórek",0.5,"szt."],["Papryka czerwona",0.5,"szt."]],
-   steps:["Około 150 g pasztetu w plastrach na przekrojoną bułkę.","Rzodkiewka, ogórek i papryka w słupkach obok.","Skyr pitny do popicia albo na deser."]},
+   steps:["Porcja: 150 g pasztetu (ok. 2 grube plastry) na przekrojoną bułkę.","Rzodkiewka, ogórek i papryka w słupkach obok.","Skyr pitny do popicia albo na deser."]},
   {day:"2",name:"Pasztet z soczewicy z jajkiem i warzywami",score:8,
    kcal:600,p:34,f:16,c:81,fib:15,
    micro:"Foliany i żelazo (soczewica), cholina i B12 (jajko), witamina C (papryka, pomidor).",
    why:"Strączki, dużo błonnika, mało tłuszczów nasyconych. Białka na dolnej granicy zielonego progu.",
    ing:[...PASZTET,["Jajka",1,"szt.","poza"],["Bułka razowa / grahamka",1,"szt.","poza"],["Pomidor",1,"szt."],["Papryka czerwona",0.5,"szt."]],
-   steps:["Jajko na twardo 10 min.","Pasztet w plastrach na bułkę, jajko w plasterkach na wierzch.","Pomidor i papryka obok."]},
+   steps:["Jajko na twardo 10 min.","Porcja: 150 g pasztetu (ok. 2 grube plastry) na bułkę, jajko w plasterkach na wierzch.","Pomidor i papryka obok."]},
   {day:"3",name:"Wrap z kurczakiem i hummusem",score:8,
    kcal:580,p:57,f:18,c:42,fib:9,
    micro:"B3 i B6 (kurczak), żelazo i foliany (ciecierzyca w hummusie), witamina C i K (roszponka, pomidor).",

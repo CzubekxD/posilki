@@ -14,7 +14,8 @@ Planowanie posiłków pod dietę odciążającą wątrobę (śródziemnomorska: 
 ## Zasady planu
 - Gotowanie w batchach: jedna baza (np. pieczony kurczak, pasztet) na kilka kolacji.
 - Kolacje z jednego batcha idą w kolejne dni pod rząd, żeby nic nie leżało długo w lodówce.
-- Pasztety i inne dania z formy liczymy na pełną objętość keksówki (ok. 25 cm, 1,5 l), a liczbę porcji i dni wyprowadzamy z tego.
+- Pasztety i inne dania z formy liczymy na pełną objętość keksówki (ok. 25 cm, 1,5 l), nadmiar Mati rozdaje. W kolacji podajemy tylko ile wchodzi do porcji.
+- Bardziej złożone przepisy (pieczenie, kilka etapów) opisujemy szczegółowo krok po kroku: ilości, czasy, temperatury, stan surowy/gotowany, po czym poznać, że gotowe.
 - Pieczywo: bułki razowe/grahamki zamiast bochenka (nie wysychają).
 - Ilości w przepisach na 1 osobę, skalowane liczbą osób przy każdej kolacji.
 - Produkty z domu (konserwy, cebula) oznaczone i pomijane na liście zakupów.
